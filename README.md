@@ -16,7 +16,7 @@ To get the project running locally, follow these steps:
 2. **Install dependencies:**
 
    ```bash
-   yarn install
+   yarn
    ```
 
 3. **Start the frontend:**
@@ -28,4 +28,14 @@ To get the project running locally, follow these steps:
 4. **Start the JSON Server:**
    ```bash
    npx json-server db.json --watch
+   ```
+
+## Credentials
+
+1. **User:** Register using any method
+2. **Admin:**
+   ```bash
+   email: admin@admin.com
+   password: admin123
+
    ```
