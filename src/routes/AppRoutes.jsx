@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
+import Books from '../components/Home/Books';
 import AddBookPage from '../dashboard/AddBookPage';
 import DashboardBookDetails from '../dashboard/DashboardBookDetails';
 import Dashboard_HomePage from '../dashboard/Dashboard_HomePage ';
@@ -23,7 +24,7 @@ const AppRoutes = () => {
 			<Route element={<MainLayout />}>
 				<Route path="/" element={<HomePage />} />
 				<Route path="/about" element={<AboutUs />} />
-				<Route path="/all-books" element={<>Books </>} />
+				<Route path="/all-books" element={<Books showAll={false} />} />
 				<Route path="/book/:id" element={<BookDetails />} />
 				<Route path="/contact" element={<ContactPage />} />
 				<Route path="/cart" element={<CartPage />} />

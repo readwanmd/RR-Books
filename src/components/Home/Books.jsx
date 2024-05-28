@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import useAxios from '../../hooks/useAxios';
 import BookCard from '../common/BookCard';
 
-const Books = () => {
+const Books = ({ showAll = true }) => {
 	const { loading, error, request } = useAxios();
 	const [books, setBooks] = useState(null);
 
@@ -24,12 +24,14 @@ const Books = () => {
 	if (loading) return <p>Loading...</p>;
 
 	return (
-		<div className="container mx-auto my-8">
+		<div id="books" className="container mx-auto my-8">
 			<div className="flex justify-between items-center my-8">
 				<h2 className="text-4xl">Books</h2>
-				<Link to={'/all-books'} className="btn btn-primary">
-					Show All
-				</Link>
+				{showAll && (
+					<Link to={'/all-books'} className="btn btn-primary">
+						Show All
+					</Link>
+				)}
 			</div>
 
 			<div className="flex flex-wrap justify-around">
