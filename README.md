@@ -34,8 +34,36 @@ To get the project running locally, follow these steps:
 
 1. **User:** Register using any method
 2. **Admin:**
+
    ```bash
    email: admin@admin.com
    password: admin123
 
    ```
+
+## Screenshots
+
+### Homepage
+
+![Homepage](./src/assets/screenshots/home.png)
+_Browse our extensive collection of books._
+
+### About Page
+
+![About Page](./src/assets/screenshots/about.png)
+_Learn more about RR Books._
+
+### Contact Page
+
+![Contact Page](./src/assets/screenshots/contact.png)
+_Get in touch with us for any inquiries._
+
+### Admin Dashboard - Home
+
+![Admin Dashboard - Home](./src/assets/screenshots/admin_dashboard_home.png)
+_Overview of the admin dashboard._
+
+### Admin Dashboard - Add Book
+
+![Admin Dashboard - Add Book](./src/assets/screenshots/dashboard_addBook.png)
+_Admin interface for adding new books._
