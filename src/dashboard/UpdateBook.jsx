@@ -7,18 +7,18 @@ import useAxios from '../hooks/useAxios';
 const UpdateBook = () => {
 	const { id } = useParams();
 	const [formData, setFormData] = useState({});
-	const { request } = useAxios();
+	const { api } = useAxios();
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchBook = async () => {
 			try {
-				const response = await request('get', `/books/${id}`);
+				const response = await api.get(`/books/${id}`);
 
-				setFormData({ ...response });
-				console.log(response);
+				setFormData({ ...response.data });
+				console.log(response.data);
 			} catch (err) {
-				console.error('Failed to fetch blog:', err);
+				console.error('Failed to fetch book:', err);
 			}
 		};
 
@@ -35,7 +35,7 @@ const UpdateBook = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await request('patch', `/books/${id}`, formData);
+		await api.patch(`/books/${id}`, formData);
 		toast.success('Book updated successfully!');
 		navigate('/dashboard');
 	};

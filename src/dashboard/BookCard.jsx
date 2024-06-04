@@ -7,26 +7,27 @@ import ConfirmDialog from '../components/common/ConfirmDialog';
 import useAxios from '../hooks/useAxios';
 
 const BookCard = ({ book }) => {
-	const { book_title, author, rating, price, id, cover } = book;
-	const { loading, error, request } = useAxios();
+	const { book_title, author, rating, price, _id, cover } = book;
+	const { api } = useAxios();
 
 	// const { dispatch } = useCart();
 	const navigate = useNavigate();
 
 	const handleUpdate = () => {
 		// Logic for updating the book
-		// history.push(`/update-book/${book.id}`);
+		// history.push(`/update-book/${book._id}`);
 	};
 
-	const deleteBook = async (id) => {
+	const deleteBook = async (_id) => {
 		try {
-			const response = await request('delete', `/books/${id}`);
+			console.log('here');
+			const response = await api.delete(`/books/${_id}`);
 
 			if (response) {
-				navigate(0);
+				navigate('/');
 			}
 		} catch (err) {
-			console.error('Failed to fetch blog:', err);
+			console.error('Failed to delete:', err);
 		}
 	};
 
@@ -70,13 +71,13 @@ const BookCard = ({ book }) => {
 				<p>{author}</p>
 				<div className="card-actions justify-between items-center">
 					<p className="font-bold">$ {price}</p>
-					<Link to={`/dashboard/details/${id}`} className="btn btn-primary">
+					<Link to={`/dashboard/details/${_id}`} className="btn btn-primary">
 						See Details
 					</Link>
 				</div>
 				<div className="card-actions justify-between items-center">
 					<Link
-						to={`/dashboard/update/${id}`}
+						to={`/dashboard/update/${_id}`}
 						className="btn btn-primary flex-1"
 						onClick={() => {}}
 					>
@@ -85,7 +86,7 @@ const BookCard = ({ book }) => {
 
 					<button
 						className="btn btn-error flex-1"
-						onClick={() => handleRemoveClick(id)}
+						onClick={() => handleRemoveClick(_id)}
 					>
 						Delete
 					</button>
@@ -93,7 +94,7 @@ const BookCard = ({ book }) => {
 			</div>
 
 			{showConfirm && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 					<ConfirmDialog
 						message="Are you sure you want to remove this item from the cart?"
 						onConfirm={handleConfirmRemove}

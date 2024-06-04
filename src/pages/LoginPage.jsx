@@ -1,10 +1,16 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth, loginWithEmailAndPassword } from '../firebase';
+import { auth as firebaseAuth } from '../firebase';
+import useAuth from '../hooks/useAuth';
 
 const LoginPage = () => {
-	const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+	const [signInWithGoogle, user, loading, error] =
+		useSignInWithGoogle(firebaseAuth);
+
+	const { auth, setAuth } = useAuth();
+	// const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
@@ -25,16 +31,39 @@ const LoginPage = () => {
 		console.log(formData);
 
 		try {
-			const response = await loginWithEmailAndPassword(
-				formData.email,
-				formData.password
+			//google login with email and password
+			// const response = await loginWithEmailAndPassword(
+			// 	formData.email,
+			// 	formData.password
+			// );
+
+			//express login with email and password
+			const response = await axios.post(
+				`${import.meta.env.VITE_SERVER_BASE_URL}/auth/login`,
+				{
+					email: formData.email,
+					password: formData.password,
+				}
 			);
 
-			console.log(response);
+			console.log({ response });
+			setAuth({ ...response.data, loginMethod: 'express' });
 			navigate('/');
 		} catch (error) {
 			console.log(error);
 		}
+	};
+
+	const googleSignin = async () => {
+		const response = await signInWithGoogle();
+		console.log({ response });
+		setAuth({
+			username: response?.user?.displayName,
+			email: response?.user?.email,
+			accessToken: response?.user?.accessToken,
+			loginMethod: 'google',
+		});
+		navigate('/');
 	};
 
 	return (
@@ -84,7 +113,7 @@ const LoginPage = () => {
 
 							<button
 								className="w-3/5 h-12 text-white text-center text-base font-semibold leading-6 rounded-full hover:bg-green-600 transition-all duration-700 bg-green-500 shadow-sm mb-11"
-								onClick={() => signInWithGoogle()}
+								onClick={googleSignin}
 							>
 								Login with Google
 							</button>

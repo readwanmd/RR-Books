@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAxios from '../../hooks/useAxios';
@@ -10,11 +11,13 @@ const Books = ({ showAll = true }) => {
 	useEffect(() => {
 		const fetchBooks = async () => {
 			try {
-				const response = await request('get', '/books');
+				const response = await axios.get(
+					`${import.meta.env.VITE_SERVER_BASE_URL}/books`
+				);
 
-				setBooks(response);
+				setBooks(response.data);
 			} catch (err) {
-				console.error('Failed to fetch blog:', error);
+				console.error('Failed to fetch books:', error);
 			}
 		};
 
@@ -35,7 +38,7 @@ const Books = ({ showAll = true }) => {
 			</div>
 
 			<div className="flex flex-wrap justify-around">
-				{books && books?.map((book) => <BookCard key={book.id} book={book} />)}
+				{books && books.map((book) => <BookCard key={book._id} book={book} />)}
 			</div>
 		</div>
 	);

@@ -36,7 +36,7 @@ const BookCard = ({ book }) => {
 		}
 	};
 
-	const { book_title, author, rating, price, id, cover } = book;
+	const { book_title, author, rating, price, _id, cover } = book;
 	return (
 		<div className="card card-compact w-96 bg-base-100 shadow-xl">
 			<figure className="w-full h-[300px]">
@@ -59,7 +59,7 @@ const BookCard = ({ book }) => {
 				<div className="card-actions justify-between items-center">
 					<p className="font-bold">$ {price}</p>
 
-					<Link to={`/book/${id}`} className="btn btn-secondary">
+					<Link to={`/book/${_id}`} className="btn btn-secondary">
 						See Details
 					</Link>
 				</div>

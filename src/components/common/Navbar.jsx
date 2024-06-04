@@ -1,24 +1,38 @@
 import { signOut } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
+import { api } from '../../api';
 import { shopingBagIcon } from '../../assets';
-import { auth } from '../../firebase';
+import { auth as firebaseAuth } from '../../firebase';
+import useAuth from '../../hooks/useAuth';
 import useCart from '../../hooks/useCart';
 
 const Navbar = () => {
 	const { state } = useCart();
 	const navigate = useNavigate();
-	const [user, loading, error] = useAuthState(auth);
+	// const [user, loading, error] = useAuthState(auth);
+	const { auth, setAuth } = useAuth();
 
-	console.log(user);
-	const handleLogout = () => {
-		signOut(auth)
-			.then(() => {
+	console.log(auth);
+	const handleLogout = async () => {
+		if (auth.loginMethod === 'google') {
+			signOut(firebaseAuth)
+				.then(() => {
+					setAuth({});
+					navigate('/login');
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} else if (auth.loginMethod === 'express') {
+			const response = await api.post(
+				`${import.meta.env.VITE_SERVER_BASE_URL}/auth/logout`
+			);
+
+			if (response.status === 200) {
+				setAuth({});
 				navigate('/login');
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+			}
+		}
 	};
 
 	return (
@@ -56,9 +70,22 @@ const Navbar = () => {
 						<li>
 							<Link to={'/contact'}>Contact</Link>
 						</li>
+
 						<li>
-							<Link to={'/dashboard'}>Dashboard</Link>
+							<a href="#faq">Faq</a>
 						</li>
+
+						{auth?.id && (
+							<li>
+								<Link to={'/profile'}>Profile</Link>
+							</li>
+						)}
+
+						{auth?.email === 'test@test.com' && (
+							<li>
+								<Link to={'/dashboard'}>Dashboard</Link>
+							</li>
+						)}
 					</ul>
 				</div>
 				<Link to={'/'} className="btn btn-ghost text-xl">
@@ -79,7 +106,17 @@ const Navbar = () => {
 						<Link to={'/contact'}>Contact</Link>
 					</li>
 
-					{user?.email === 'admin@admin.com' && (
+					<li>
+						<a href="#faq">Faq</a>
+					</li>
+
+					{auth?.id && (
+						<li>
+							<Link to={'/profile'}>Profile</Link>
+						</li>
+					)}
+
+					{auth?.email === 'test@test.com' && (
 						<li>
 							<Link to={'/dashboard'}>Dashboard</Link>
 						</li>
@@ -94,14 +131,23 @@ const Navbar = () => {
 						{state?.items.length}
 					</div>
 				</Link>
-				{!user ? (
+				{!auth?.email ? (
 					<Link to={'/login'} className="btn btn-primary">
 						Login
 					</Link>
 				) : (
-					<button className="btn btn-primary" onClick={handleLogout}>
-						Logout
-					</button>
+					<>
+						<details className="dropdown dropdown-end">
+							<summary className="m-1 btn">{auth?.username}</summary>
+							<ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box">
+								<li>
+									<button className="btn btn-primary" onClick={handleLogout}>
+										Logout
+									</button>
+								</li>
+							</ul>
+						</details>
+					</>
 				)}
 			</div>
 		</div>

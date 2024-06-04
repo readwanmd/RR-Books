@@ -6,7 +6,6 @@ import useAxios from '../hooks/useAxios';
 
 const AddBookPage = () => {
 	const [formData, setFormData] = useState({
-		id: crypto.randomUUID(),
 		book_title: '',
 		author: '',
 		genre: '',
@@ -19,7 +18,7 @@ const AddBookPage = () => {
 		language: '',
 		cover: '',
 	});
-	const { request } = useAxios();
+	const { api } = useAxios();
 	const navigate = useNavigate();
 
 	const handleChange = (e) => {
@@ -32,9 +31,9 @@ const AddBookPage = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await request('post', '/books', formData);
+		await api.post('/books', formData);
 		toast.success('Book added successfully!');
-		navigate('/dashboard');
+		navigate('/dashboard/books');
 	};
 
 	return (

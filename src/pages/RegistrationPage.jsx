@@ -1,7 +1,8 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth, registerWithEmailAndPassword } from '../firebase';
+import { auth } from '../firebase';
 import useAxios from '../hooks/useAxios';
 
 const RegistrationPage = () => {
@@ -27,9 +28,18 @@ const RegistrationPage = () => {
 		console.log(formData);
 
 		try {
-			const response = await registerWithEmailAndPassword(
-				formData.email,
-				formData.password
+			// const response = await registerWithEmailAndPassword(
+			// 	formData.email,
+			// 	formData.password
+			// );
+
+			const response = await axios.post(
+				`${import.meta.env.VITE_SERVER_BASE_URL}/auth/register`,
+				{
+					username: formData.name,
+					email: formData.email,
+					password: formData.password,
+				}
 			);
 
 			console.log(response);

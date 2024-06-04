@@ -7,18 +7,17 @@ const DashboardBookDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const { loading, error, request } = useAxios();
+	const { api } = useAxios();
 	const [book, setBook] = useState(null);
 
 	useEffect(() => {
 		const fetchBook = async () => {
 			try {
-				const response = await request('get', `/books/${id}`);
+				const response = await api.get(`/books/${id}`);
 
-				setBook(response);
-				console.log(response);
+				setBook(response.data);
 			} catch (err) {
-				console.error('Failed to fetch blog:', err);
+				console.error('Failed to fetch book:', err);
 			}
 		};
 
@@ -27,13 +26,13 @@ const DashboardBookDetails = () => {
 
 	const deleteBook = async (id) => {
 		try {
-			const response = await request('delete', `/books/${id}`);
+			const response = await api.delete(`/books/${id}`);
 
 			if (response) {
 				navigate('/dashboard');
 			}
 		} catch (err) {
-			console.error('Failed to fetch blog:', error);
+			console.error('Failed to delete:', err);
 		}
 	};
 
@@ -56,7 +55,7 @@ const DashboardBookDetails = () => {
 		setItemToRemove(null);
 	};
 
-	if (loading) return <p>Loading...</p>;
+	// if (loading) return <p>Loading...</p>;
 
 	return (
 		<div className="flex flex-col items-center p-4 sm:p-8 bg-gray-100 min-h-screen">

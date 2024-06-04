@@ -1,41 +1,68 @@
+/* eslint-disable no-useless-catch */
 import axios from 'axios';
-import { useCallback, useState } from 'react';
+import { useEffect } from 'react';
+import { api } from '../api';
+import useAuth from './useAuth';
 
 const useAxios = () => {
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(null);
+	const { auth, setAuth } = useAuth();
 
-	const api = axios.create({
-		baseURL: import.meta.env.VITE_SERVER_BASE_URL,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	useEffect(() => {
+		// add a request interceptor
+		const requestIntercept = api.interceptors.request.use(
+			(config) => {
+				const accessToken = auth?.accessToken;
+				// console.log(accessToken);
 
-	const request = useCallback(
-		async (method, url, data = null) => {
-			setLoading(true);
-			setError(null);
-			try {
-				const response = await api({
-					method,
-					url,
-					data,
-				});
-				if (response.status === 200) {
-					return response.data;
+				if (accessToken) {
+					config.headers.Authorization = `Bearer ${accessToken}`;
 				}
-			} catch (err) {
-				setError(err);
-				throw err;
-			} finally {
-				setLoading(false);
+
+				return config;
+			},
+			(error) => Promise.reject(error)
+		);
+
+		// add a response interceptor
+		const responseIntercept = api.interceptors.response.use(
+			(response) => response,
+			async (error) => {
+				const originalRequest = error.config;
+				if (
+					error.response &&
+					error.response.status === 401 &&
+					!originalRequest._retry
+				) {
+					originalRequest._retry = true;
+
+					try {
+						const refreshToken = auth?.refreshToken;
+						const response = await axios.post(
+							`${import.meta.env.VITE_SERVER_BASE_URL}/auth/refresh-token`,
+							{ refreshToken }
+						);
+
+						const { accessToken } = response.data;
+						setAuth({ ...auth, accessToken });
+
+						originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+
+						return api(originalRequest);
+					} catch (error) {
+						throw error;
+					}
+				}
+
+				return Promise.reject(error);
 			}
-		},
-		[api]
-	);
+		);
 
-	return { loading, error, request };
+		return () => {
+			api.interceptors.request.eject(requestIntercept);
+			api.interceptors.response.eject(responseIntercept);
+		};
+	}, [auth]);
+
+	return { api };
 };
-
 export default useAxios;
