@@ -8,19 +8,18 @@ import useCart from '../hooks/useCart';
 const BookDetails = () => {
 	const { id } = useParams();
 
-	const { loading, error, request } = useAxios();
-	const [book, setBook] = useState(null);
 	const { state, dispatch } = useCart();
+	const { api } = useAxios();
+	const [book, setBook] = useState(null);
 
 	useEffect(() => {
 		const fetchBook = async () => {
 			try {
-				const response = await request('get', `/books/${id}`);
+				const response = await api.get(`/books/${id}`);
 
-				setBook(response);
-				console.log(response);
+				setBook(response.data);
 			} catch (err) {
-				console.error('Failed to fetch blog:', error);
+				console.error('Failed to fetch book:', err);
 			}
 		};
 
@@ -54,8 +53,6 @@ const BookDetails = () => {
 			});
 		}
 	};
-
-	if (loading) return <p>Loading...</p>;
 
 	return (
 		<div className="flex flex-col items-center p-4 sm:p-8 bg-gray-100 min-h-screen">
