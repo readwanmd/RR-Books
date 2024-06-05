@@ -8,6 +8,12 @@
 	}
 }
 
+@layer components {
+	.active {
+		@apply bg-red-200;
+	}
+}
+
 .feedback-row {
 	display: flex;
 	gap: 1rem;
