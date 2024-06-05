@@ -1,10 +1,12 @@
 # RR Books
 
-RR Books is an online platform for buying and selling books. The application allows users to browse and purchase books while providing administrative capabilities to add, update, and delete books.
+RR Books is an online platform for buying and selling books. The application allows users to browse and purchase books while providing administrative capabilities to add, update, and delete books. manage users and stuff.
 
 ## Installation and Setup
 
 To get the project running locally, follow these steps:
+
+### For Frontend:
 
 1. **Clone the repository:**
 
@@ -25,10 +27,28 @@ To get the project running locally, follow these steps:
    yarn dev
    ```
 
-4. **Start the JSON Server:**
+### For Backend:
+
+Goto [BackEnd Repository](https://github.com/readwanmd/RR-Books-Backend)
+
+1. **Clone the repository:**
+
    ```bash
-   npx json-server db.json --watch
+   git clone <repository-url>
+   cd RR-Books-Backend
    ```
+
+2. **Install dependencies:**
+
+   ```bash
+   yarn
+   ```
+
+3. **Start Backend Server:**
+   ```bash
+   yarn dev
+   ```
+   _Although environment veriable is not shareable but i give it to repository, don't missuse. If you want you can use your own credentials._
 
 ## Credentials
 
@@ -36,9 +56,8 @@ To get the project running locally, follow these steps:
 2. **Admin:**
 
    ```bash
-   email: admin@admin.com
+   email: test@test.com
    password: admin123
-
    ```
 
 ## Screenshots
@@ -60,10 +79,5 @@ _Get in touch with us for any inquiries._
 
 ### Admin Dashboard - Home
 
-![Admin Dashboard - Home](./src/assets/screenshots/admin_dashboard_home.png)
+![Admin Dashboard - Home](./src/assets/screenshots/dashboard.png)
 _Overview of the admin dashboard._
-
-### Admin Dashboard - Add Book
-
-![Admin Dashboard - Add Book](./src/assets/screenshots/dashboard_addBook.png)
-_Admin interface for adding new books._
