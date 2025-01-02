@@ -1,4 +1,4 @@
-# RR Books [Live](rr-books.vercel.app)
+# RR Books [Live](https://rr-books.vercel.app/)
 
 RR Books is an online platform for buying and selling books. The application allows users to browse and purchase books while providing administrative capabilities to add, update, and delete books. manage users and stuff.
 
